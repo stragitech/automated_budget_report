@@ -9,34 +9,27 @@ with open(csvpath, 'r') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=",")
 
     for row in csvreader:
-        # test data
-        # print(row)
         full_list = full_list + row
 
 # split list into two halves
 date = full_list[::2]
 profits = full_list[1::2]
-print(date)
-print(profits)
-print(type(profits[0]))
 
 # Converting list of strings to list of integers and skipping first item 'Profit/Losses'
 profits = list(map(int, profits[1:]))
 
 #skipping 'Date' header and merging 2 lists into a dictionary
 full_books = dict(zip(date[1:], profits))
-print(full_books)
 
-#total months
+#get number of months
 total_months = len(full_books)
-#print(total_months)
 
-#sum
-#print(sum(full_books.values()))
+#get sum of profit values
+full_sum = sum(full_books.values())
+
 
 # get net average change
-average_change = (profits[0] - profits[total_months - 1]) / total_months
-
+average_change = (profits[0] - profits[total_months - 1]) / (total_months -1)
 
 # find change in profit
 counter = 0
@@ -48,29 +41,29 @@ while counter < len(profits[:85]):
     counter += 1
     
     m_total.append(change)
-    #print(len(m_total))
-    
-    print(change)
 
-    
-    print(counter)
+# get max and min
+min_m_total = min(m_total)
+max_m_total = max(m_total)
 
-# min and max change    
-#print(min(m_total))
-#print(max(m_total))
+# cast integers to strings
+min_val = str(min_m_total)
+max_val = str(max_m_total)
+months = str(total_months)
+total = str(full_sum)
+avg = str(average_change)
 
-def terminal_f():
-    return "Financial Analysis"    
-    return "--------------------------------"
-    
-    return total_months
-    
-    return average_change
-    return min(m_total)
-    return max(m_total)
-    
-output = terminal_f()
-file = open("Financial_Analysis.txt","w")
-file.write("Financial Analysis")
-file.write("-------------------")
-file.close()
+#open file and write output in file
+with open("Financial_Analysis.txt", "w") as file:
+    file.write("Financial_Analysis" + "\n")
+    file.write("----------------------" + "\n")
+    file.write("Total Months: " + months+ "\n")
+    file.write("Total: $" + total + "\n")
+    file.write("Average Change: -$" + avg + "\n")      
+    file.write("Greatest Increase in Profits " + max_val + "\n")
+    file.write("Greatest Decrease in Profits " + min_val + "\n")
+
+#read output from written file
+with open("Financial_Analysis.txt", "r") as file_r:
+    for line in file_r:
+        print(line, end = '')
