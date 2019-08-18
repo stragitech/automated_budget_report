@@ -39,7 +39,7 @@ while counter < len(profits[:85]):
     change = profits[counter +1] - profits[counter]
     
     counter += 1
-    
+    #new list of monthly profit changes
     m_total.append(change)
 
 # get max and min
@@ -53,6 +53,27 @@ months = str(total_months)
 total = str(full_sum)
 avg = str(average_change)
 
+#chop excess values
+avg = avg[:7]
+
+#add a zero change value to first month
+filler =  [ 0 ]
+month_change = filler + m_total
+
+#convert int list to list of strings
+for i in range(0, len(month_change)): 
+    month_change[i] = str(month_change[i])
+
+#remove header from date
+date.pop(0)
+
+#zip monthly_change as key, and date as value to check later
+monthly_change = dict(zip(month_change, date))
+
+#assign min and max key values to proper date
+min_month = monthly_change[min_val]
+max_month = monthly_change[max_val]
+
 #open file and write output in file
 with open("Financial_Analysis.txt", "w") as file:
     file.write("Financial_Analysis" + "\n")
@@ -60,8 +81,9 @@ with open("Financial_Analysis.txt", "w") as file:
     file.write("Total Months: " + months+ "\n")
     file.write("Total: $" + total + "\n")
     file.write("Average Change: -$" + avg + "\n")      
-    file.write("Greatest Increase in Profits " + max_val + "\n")
-    file.write("Greatest Decrease in Profits " + min_val + "\n")
+    file.write("Greatest Increase in Profits: " + max_month + " ($" + max_val + ")\n")
+    file.write("Greatest Decrease in Profits: " + min_month + " ($" + min_val + ")\n")
+file.close
 
 #read output from written file
 with open("Financial_Analysis.txt", "r") as file_r:
